@@ -15,6 +15,7 @@ AIScorePositionAPI = "http://localhost:8080/api/v1/recommend_jobs"
 AIScoreCandidateAPI = "http://localhost:8080/api/v1/rank_candidates"
 config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
 
+
 @router.post("/api/v1/recommend_jobs")
 def recommend_jobs(resume_file: UploadFile = File(...)):
     # curl -X POST http://localhost:5000/recommend_jobs -F "resume_file=@/path/to/resume.pdf"
@@ -37,17 +38,8 @@ def recommend_jobs(resume_file: UploadFile = File(...)):
     return JSONResponse(content=positions_score, status_code=200)
 
 
-class Job(BaseModel):
-    title: str
-    description: str
-    location: str
-    salary: float
-    company_name: str
-    create_at: str
-
-
 @router.post('/api/v1/rank_candidates')
-def rank_candidates(job: json, resume_files: List[UploadFile] = File(...)):
+def rank_candidates(job: dict, resume_files: List[UploadFile] = File(...)):
     candidate_config_path = config_path
     candidate_settings = json.load(open(candidate_config_path))
     candidate_number = candidate_settings["candidate-recommend-number"]
