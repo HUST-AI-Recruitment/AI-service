@@ -25,7 +25,7 @@ def recommend_jobs(resume_file: UploadFile = File(...)):
     positions_data = requests.get(GetAllPositionAPI).json()
     positions_score = []
     for position in positions_data:
-        text_prompt = job.describe_job(position)
+        text_prompt = job.describe_job(position, mode="job-recommend")
         try:
             ai_score = requests.post(AIScorePositionAPI, json={"prompt": text_prompt, "resume_file": resume_file.file}).json()
             if ai_score.status_code != 200:
@@ -45,7 +45,7 @@ def rank_candidates(job: dict, resume_files: List[UploadFile] = File(...)):
     candidate_number = candidate_settings["candidate-recommend-number"]
     candidates = []
     for resume in resume_files:
-        text_prompt = job.describe_job(job)
+        text_prompt = job.describe_job(job, mode="candidate-recommend")
         try:
             ai_score = requests.post(AIScoreCandidateAPI, json={"prompt": text_prompt, "resume_file": resume.file}).json()
             if ai_score.status_code != 200:

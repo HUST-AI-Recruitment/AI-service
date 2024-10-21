@@ -18,7 +18,6 @@ key = json.load(open(api_config_path))['api-key']
 @router.post("/api/v1/recommend_jobs")
 def recommended_jobs_scoring(prompt: str, resume_file: UploadFile = File(...)):
     score: int
-    # TODO
     try:
         client = OpenAI(
             api_key = key,
@@ -33,7 +32,7 @@ def recommended_jobs_scoring(prompt: str, resume_file: UploadFile = File(...)):
             ]
         )
     except:
-        return JSONResponse(content={"error": "error"}, status_code=500)
+        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=500)
     model_response = completion.model_dump_json()
     response_text = model_response['choices'][0]['message']['content']
     score = ai_service.AI_response_handler(response_text)
@@ -43,6 +42,22 @@ def recommended_jobs_scoring(prompt: str, resume_file: UploadFile = File(...)):
 @router.post('/api/v1/rank_candidates')
 def scoring_candidates(prompt: str, resume: UploadFile = File(...)):
     score: int
-    # TODO
-
+    try:
+        client = OpenAI(
+            api_key = key,
+            base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        )
+        file_object = client.files.create(file=resume.file, purpose="file-extract")
+        completion = client.chat.completions.create(
+            model="qwen-long",
+            messages=[
+                {'role': 'system', 'content': f'fileid://{file_object.id}'},
+                {'role': 'user', 'content': prompt}
+            ]
+        )
+    except:
+        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=500)
+    model_response = completion.model_dump_json()
+    response_text = model_response['choices'][0]['message']['content']
+    score = ai_service.AI_response_handler(response_text)
     return JSONResponse(content={"score": score}, status_code=200)
