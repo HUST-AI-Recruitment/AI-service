@@ -1,0 +1,27 @@
+{
+    "id": "chatcmpl-e4f7345c-e4b6-9a1e-babe-783a9adf7ea8",
+    "choices": [
+        {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "message": {
+                "content": "这篇文章介绍了多个型号的百炼系列手机产品，包括百炼X1、通义Vivid 7、星尘S9 Pro、百炼Ace Ultra、百炼Zephyr Z9以及百炼Flex Fold+，详细描述了各款手机的特点、配置和售价等信息。",
+                "refusal": null,
+                "role": "assistant",
+                "function_call": null,
+                "tool_calls": null
+            }
+        }
+    ],
+    "created": 1728388101,
+    "model": "qwen-long",
+    "object": "chat.completion",
+    "service_tier": null,
+    "system_fingerprint": null,
+    "usage": {
+        "completion_tokens": 63,
+        "prompt_tokens": 5395,
+        "total_tokens": 5458
+    }
+}

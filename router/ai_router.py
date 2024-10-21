@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 import json
 import os
 from openai import OpenAI
+from service import ai_service
 
 router = APIRouter()
 # AIScoreAPI = "http://localhost:8080/api/v1/ai_score"
@@ -23,11 +24,19 @@ def recommended_jobs_scoring(prompt: str, resume_file: UploadFile = File(...)):
             api_key = key,
             base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
-        file_object = client.files.upload(resume_file.file, purpose = "file-extract")
-        file_object = resume_file.file
-        
+        file_object = client.files.create(file=resume_file.file, purpose="file-extract")
+        completion = client.chat.completions.create(
+            model="qwen-long",
+            messages=[
+                {'role': 'system', 'content': f'fileid://{file_object.id}'},
+                {'role': 'user', 'content': prompt}
+            ]
+        )
     except:
         return JSONResponse(content={"error": "error"}, status_code=500)
+    model_response = completion.model_dump_json()
+    response_text = model_response['choices'][0]['message']['content']
+    score = ai_service.AI_response_handler(response_text)
     return JSONResponse(content={"score": score}, status_code=200)
 
 
