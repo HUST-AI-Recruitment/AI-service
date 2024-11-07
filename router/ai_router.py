@@ -16,19 +16,18 @@ key = json.load(open(api_config_path))['api-key']
 
 
 @router.post("/api/v1/recommend_jobs")
-def recommended_jobs_scoring(prompt: json):
-    prompt = prompt["prompt"]
+def recommended_jobs_scoring(prompt: str, resume_file: UploadFile = File(...)):
     score: int
     try:
         client = OpenAI(
             api_key = key,
             base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
-        # file_object = client.files.create(file=resume_file.file, purpose="file-extract")
+        file_object = client.files.create(file=resume_file.file, purpose="file-extract")
         completion = client.chat.completions.create(
             model="qwen-long",
             messages=[
-                # {'role': 'system', 'content': f'fileid://{file_object.id}'},
+                {'role': 'system', 'content': f'fileid://{file_object.id}'},
                 {'role': 'user', 'content': prompt}
             ]
         )
