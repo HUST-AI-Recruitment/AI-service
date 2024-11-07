@@ -14,6 +14,8 @@ key = json.load(open(api_config_path))['api-key']
 # use ali AI API, api-key should not leak, so put it in the config file
 # and add the config file to .gitignore
 
+aliyun_dashscope_url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+
 class PROMPT(BaseModel):
     prompt: str
 
@@ -23,10 +25,11 @@ def recommended_jobs_scoring(prompt: PROMPT):
     try:
         client = OpenAI(
             api_key = key,
-            base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
+            base_url = aliyun_dashscope_url,
         )
         completion = client.chat.completions.create(
             model="qwen-turbo",
+            response_format="json_object",
             messages=[
                 {'role': 'system',
                  'content': {'type': 'text',
@@ -39,7 +42,7 @@ def recommended_jobs_scoring(prompt: PROMPT):
             ]
         )
     except:
-        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=500)
+        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=502)
     model_response = completion.model_dump_json()
     response_text = model_response['choices'][0]['message']['content']
     score = ai_service.AI_response_handler(response_text)
@@ -52,10 +55,11 @@ def scoring_candidates(prompt: PROMPT):
     try:
         client = OpenAI(
             api_key = key,
-            base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
+            base_url = aliyun_dashscope_url,
         )
         completion = client.chat.completions.create(
             model="qwen-turbo",
+            response_format="json_object",
             messages=[
                 {'role': 'system',
                  'content': {'type': 'text',
@@ -68,7 +72,7 @@ def scoring_candidates(prompt: PROMPT):
             ]
         )
     except:
-        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=500)
+        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=502)
     model_response = completion.model_dump_json()
     response_text = model_response['choices'][0]['message']['content']
     score = ai_service.AI_response_handler(response_text)
