@@ -7,6 +7,7 @@ education_bias = 1
 
 def describe_job(position, mode):
     assert mode in allowing_modes
+    # print(position)
     id = position['id']
     title = position['title']
     description = position['description']
@@ -59,7 +60,7 @@ def describe_player(resume, mode):
         I am look into jobs. In the following is my resume.
         My name is {name}, my gender is {gender}, and I {state}. I could describe myself as {description}.
         My highest degree is {highest_degree}. I have {len(experience)} work experiences.
-        For my last job, I worked as {latest_experience['title']} at {latest_experience['company']} from {latest_experience['start_time']} to {latest_experience['end_time']}.
+        For my last job, I worked as {latest_experience['position']} at {latest_experience['company']} from {latest_experience['start_time']} to {latest_experience['end_time']}.
         I have {len(project)} projects which is related to my field.
         """
     elif mode == 'recommend-description':
@@ -95,7 +96,7 @@ def describe_player(resume, mode):
         rate the candidate by 1-100, 100 is the best match, 1 is the worst match. Just answer one number as score.
         {hisher} name is {name}, gender is {gender}, and the candidate {state}. {heorshe} could describe {himselfherself} as {description}.
         {hisher} highest degree is {highest_degree}, and have {len(experience)} work experiences.
-        For {hisher} last job, {heorshe} worked as {latest_experience['title']} at {latest_experience['company']} from {latest_experience['start_time']} to {latest_experience['end_time']}.
+        For {hisher} last job, {heorshe} worked as {latest_experience['position']} at {latest_experience['company']} from {latest_experience['start_time']} to {latest_experience['end_time']}.
         {heorshe} have {len(project)} projects which is related to {hisher} field.
         """
         

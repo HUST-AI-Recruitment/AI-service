@@ -8,23 +8,23 @@ from openai import OpenAI
 from service import ai_service
 
 router = APIRouter()
-# AIScoreAPI = "http://localhost:8080/api/v1/ai_score"
+
 api_config_path = os.path.join(os.path.dirname(__file__), "../config/api-key.json")
 key = json.load(open(api_config_path))['api-key']
 # use ali AI API, api-key should not leak, so put it in the config file
 # and add the config file to .gitignore
 
+class PROMPT(BaseModel):
+    prompt: str
 
-@router.post("/api/v1/recommend_jobs")
-def recommended_jobs_scoring(prompt: json):
-    prompt = prompt["prompt"]
-    score: int
+@router.post("/api/v1/recommend_jobs/ai")
+def recommended_jobs_scoring(prompt: PROMPT):
+    prompt = prompt.prompt
     try:
         client = OpenAI(
             api_key = key,
             base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
-        # file_object = client.files.create(file=resume_file.file, purpose="file-extract")
         completion = client.chat.completions.create(
             model="qwen-turbo",
             messages=[
@@ -47,14 +47,13 @@ def recommended_jobs_scoring(prompt: json):
 
 
 @router.post('/api/v1/rank_candidates')
-def scoring_candidates(prompt: str, resume: UploadFile = File(...)):
-    score: int
+def scoring_candidates(prompt: PROMPT):
+    prompt = prompt.prompt
     try:
         client = OpenAI(
             api_key = key,
             base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
-        # file_object = client.files.create(file=resume.file, purpose="file-extract")
         completion = client.chat.completions.create(
             model="qwen-turbo",
             messages=[

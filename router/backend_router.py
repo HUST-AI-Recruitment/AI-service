@@ -10,21 +10,26 @@ import json
 import os
 
 router = APIRouter()
-GetAllPositionAPI = "http://localhost:8080/api/v1/jobs"
-AIScorePositionAPI = "http://localhost:8080/api/v1/recommend_jobs"
-AIScoreCandidateAPI = "http://localhost:8080/api/v1/rank_candidates"
+GetAllPositionAPI = "http://localhost:5000/api/v1/jobs"
+AIScorePositionAPI = "http://localhost:5000/api/v1/recommend_jobs/ai"
+AIScoreCandidateAPI = "http://localhost:5000/api/v1/rank_candidates"
 config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
 
+class RESUME(BaseModel):
+    resume: dict
+    jobs: List[dict]
+    
 
 @router.post("/api/v1/recommend_jobs/resume")
-def recommend_jobs_resume(post_data: json):
-    recommend_config_path = config_path
-    recommend_settings = json.load(open(recommend_config_path))
-    recommend_number = recommend_settings["recommend_number"]
-    resume = post_data["resume"]
-    positions_data = post_data["jobs"]
+def recommend_jobs_resume(post_data: RESUME):
+    # return post_data
+    # print('recommend_jobs_resume called')
+    recommend_number = 5
+    resume = post_data.resume
+    positions_data = post_data.jobs
     positions_score = []
     for position in positions_data:
+        # return position
         job_prompt = job.describe_job(position, mode="recommend-resume")
         player_prompt = job.describe_player(resume, mode="recommend-resume")
         prompt = player_prompt + job_prompt
@@ -41,13 +46,16 @@ def recommend_jobs_resume(post_data: json):
     position_id = {"job": position_id}
     return JSONResponse(content=position_id, status_code=200) 
 
+class DESCRIPTION(BaseModel):
+    description: str
+    jobs: List[dict]
+
+
 @router.post("/api/v1/recommend_jobs/description")
-def recommend_jobs_resume(post_data: json):
-    recommend_config_path = config_path
-    recommend_settings = json.load(open(recommend_config_path))
-    recommend_number = recommend_settings["recommend_number"]
-    description = post_data["description"]
-    positions_data = post_data["jobs"]
+def recommend_jobs_description(post_data: DESCRIPTION):
+    recommend_number = 5
+    description = post_data.description
+    positions_data = post_data.jobs
     positions_score = []
     for position in positions_data:
         job_prompt = job.describe_job(position, mode="recommend-description")
@@ -66,21 +74,20 @@ def recommend_jobs_resume(post_data: json):
     position_id = {"job": position_id}
     return JSONResponse(content=position_id, status_code=200) 
 
+class RANK(BaseModel):
+    job: dict
+    resumes: List[dict]
+    
 
 @router.post('/api/v1/rank_candidates')
-def rank_candidates(post_data: json):
-    # Setting the candidate number from config file
-    candidate_config_path = config_path
-    candidate_settings = json.load(open(candidate_config_path))
-    candidate_number = candidate_settings["candidate-recommend-number"]
+def rank_candidates(post_data: RANK):
+    candidate_number = 5
     candidates = []
     
-    # extract datas from post_data
     resumes = post_data["resumes"]
     job = post_data["job"]
     job_prompt = job.describe_job(job, mode="rank-candidates")
     
-    # rank the candidates
     for resume in resumes:
         player_prompt = job.describe_player(resume, mode="rank-candidates")
         prompt = job_prompt + player_prompt
