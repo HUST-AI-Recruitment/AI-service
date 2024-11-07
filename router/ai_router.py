@@ -26,10 +26,16 @@ def recommended_jobs_scoring(prompt: json):
         )
         # file_object = client.files.create(file=resume_file.file, purpose="file-extract")
         completion = client.chat.completions.create(
-            model="qwen-long",
+            model="qwen-turbo",
             messages=[
-                # {'role': 'system', 'content': f'fileid://{file_object.id}'},
-                {'role': 'user', 'content': prompt}
+                {'role': 'system',
+                 'content': {'type': 'text',
+                             'text': 'You are to score the job and candidate based on the following information'}
+                },
+                {'role': 'user',
+                 'content': {'type': 'text',
+                             'text': prompt}
+                }
             ]
         )
     except:
@@ -48,12 +54,18 @@ def scoring_candidates(prompt: str, resume: UploadFile = File(...)):
             api_key = key,
             base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
-        file_object = client.files.create(file=resume.file, purpose="file-extract")
+        # file_object = client.files.create(file=resume.file, purpose="file-extract")
         completion = client.chat.completions.create(
-            model="qwen-long",
+            model="qwen-turbo",
             messages=[
-                {'role': 'system', 'content': f'fileid://{file_object.id}'},
-                {'role': 'user', 'content': prompt}
+                {'role': 'system',
+                 'content': {'type': 'text',
+                             'text': 'You are to score the candidate based on the following information'},
+                },
+                {'role': 'user',
+                 'content': {'type': 'text',
+                             'text': prompt}
+                }
             ]
         )
     except:
