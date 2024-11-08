@@ -52,7 +52,7 @@ def scoring_candidates(prompt: PROMPT):
             base_url = aliyun_dashscope_url,
         )
         completion = client.chat.completions.create(
-            model="qwen-turbo",
+            model = aliyun_dashscope_model,
             response_format="json_object",
             messages=[
                 {'role': 'system',
