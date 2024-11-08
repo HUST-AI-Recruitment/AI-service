@@ -52,7 +52,7 @@ def recommended_jobs_scoring(prompt: PROMPT):
 @router.post('/api/v1/rank_candidates/ai')
 def scoring_candidates(prompt: PROMPT):
     prompt = prompt.prompt
-    prompt = prompt + "Please answer in json format"
+    # prompt = prompt + "Please answer in json format"
     try:
         client = OpenAI(
             api_key = key,
