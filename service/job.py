@@ -8,7 +8,7 @@ education_bias = 1
 def describe_job(position, mode):
     assert mode in allowing_modes
     # print(position)
-    id = position['id']
+    # id = position['id']
     title = position['title']
     description = position['description']
     demand = position['demand']
@@ -17,10 +17,10 @@ def describe_job(position, mode):
     company = position['company']
     # created = position['create_at']
     job_type = position['job_type']
-    owner_id = position['owner_id']
+    # owner_id = position['owner_id']
     if mode in ['recommend-resume', 'recommend-description']:
         return f"""
-        In the following is one of the jobs to be considered, its id is {id}, please consider the job description and my resume,
+        In the following is one of the jobs to be considered please consider the job description and my resume,
         rate this job by 1-100, 100 is the best match, 1 is the worst match. Just answer one number as score.
         The job title is {title}, and can be described as {description}, and the work location is {location}.
         The job type is {job_type}. The company requires {demand}. While the salary is {salary} RMB per month, the company name is {company}.
