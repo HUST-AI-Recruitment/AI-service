@@ -35,11 +35,12 @@ def recommend_jobs_resume(post_data: RESUME):
         prompt = player_prompt + job_prompt
         try:
             ai_score = requests.post(AIScorePositionAPI, json={"prompt": prompt}).json()
+            print(ai_score)
             if ai_score.status_code != 200:
                 return JSONResponse(content={"error": "AI service error"}, status_code=500)
             ai_score = ai_score["score"]
-        except:
-            return JSONResponse(content={"error": "AI service error"}, status_code=500)
+        except Exception as e:
+            return JSONResponse(content={"error": f"AI service error: {e}"}, status_code=500)
         positions_score.append({"id": position["id"], "ai_score": ai_score})
     positions_score = sorted(positions_score, key=lambda x: x["ai_score"], reverse=True)[:recommend_number]
     position_id = [position["id"] for position in positions_score]

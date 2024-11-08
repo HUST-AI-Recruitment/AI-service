@@ -14,7 +14,7 @@ key = json.load(open(api_config_path))['api-key']
 # use ali AI API, api-key should not leak, so put it in the config file
 # and add the config file to .gitignore
 
-aliyun_dashscope_url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
+aliyun_dashscope_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 class PROMPT(BaseModel):
     prompt: str
@@ -29,20 +29,14 @@ def recommended_jobs_scoring(prompt: PROMPT):
         )
         completion = client.chat.completions.create(
             model="qwen-turbo",
-            response_format="json_object",
+            response_format={"type": "json_object"},
             messages=[
-                {'role': 'system',
-                 'content': {'type': 'text',
-                             'text': 'You are to score the job and candidate based on the following information'}
-                },
-                {'role': 'user',
-                 'content': {'type': 'text',
-                             'text': prompt}
-                }
+                { 'role': 'system', 'content': 'You are to score the job and candidate based on the following information' },
+                { 'role': 'user', 'content': prompt }
             ]
         )
-    except:
-        return JSONResponse(content={"error": "Aliyun-connection-error"}, status_code=502)
+    except Exception as e:
+        return JSONResponse(content={"error": f"Aliyun-connection-error {e}"}, status_code=502)
     model_response = completion.model_dump_json()
     response_text = model_response['choices'][0]['message']['content']
     score = ai_service.AI_response_handler(response_text)
