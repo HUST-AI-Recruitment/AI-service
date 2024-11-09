@@ -14,4 +14,4 @@ def get_health():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=5000)
+    uvicorn.run(app, host="ai", port=5000)

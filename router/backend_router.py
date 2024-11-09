@@ -10,9 +10,9 @@ import json
 import os
 
 router = APIRouter()
-GetAllPositionAPI = "http://localhost:5000/api/v1/jobs"
-AIScorePositionAPI = "http://localhost:5000/api/v1/recommend_jobs/ai"
-AIScoreCandidateAPI = "http://localhost:5000/api/v1/rank_candidates/ai"
+GetAllPositionAPI = "http://ai:5000/api/v1/jobs"
+AIScorePositionAPI = "http://ai:5000/api/v1/recommend_jobs/ai"
+AIScoreCandidateAPI = "http://ai:5000/api/v1/rank_candidates/ai"
 config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
 
 class RESUME(BaseModel):
