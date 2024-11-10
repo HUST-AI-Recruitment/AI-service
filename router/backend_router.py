@@ -9,11 +9,15 @@ from typing import List
 import json
 import os
 
+settings_config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
+port = json.load(open(settings_config_path))['port']
+
+
 router = APIRouter()
-GetAllPositionAPI = "http://localhost:5000/api/v1/jobs"
-AIScorePositionAPI = "http://localhost:5000/api/v1/recommend_jobs/ai"
-AIScoreCandidateAPI = "http://localhost:5000/api/v1/rank_candidates/ai"
-config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
+GetAllPositionAPI = f"http://localhost:{port}/api/v1/jobs"
+AIScorePositionAPI = f"http://localhost:{port}/api/v1/recommend_jobs/ai"
+AIScoreCandidateAPI = f"http://localhost:{port}/api/v1/rank_candidates/ai"
+
 
 class RESUME(BaseModel):
     resume: dict
@@ -100,7 +104,7 @@ def rank_candidates(post_data: RANK):
                 return JSONResponse(content={"error": "AI service error"}, status_code=500)
             ai_score = ai_score.json()
             ai_score = ai_score["score"]
-            candidates.append({"id": resume["id"], "score": ai_score})
+            candidates.append({"id": resume["user_id"], "score": ai_score})
         except:
             return JSONResponse(content={"error": "AI service error"}, status_code=500)
     candidates = sorted(candidates, key=lambda x: x["score"], reverse=True)[:candidate_number]
