@@ -14,10 +14,10 @@ port = json.load(open(settings_config_path))['port']
 
 
 router = APIRouter()
-GetAllPositionAPI = f"http://localhost:{port}/api/v1/jobs"
-AIScorePositionAPI = f"http://localhost:{port}/api/v1/recommend_jobs/ai"
-AIScoreCandidateAPI = f"http://localhost:{port}/api/v1/rank_candidates/ai"
-
+GetAllPositionAPI = "http://ai:5000/api/v1/jobs"
+AIScorePositionAPI = "http://ai:5000/api/v1/recommend_jobs/ai"
+AIScoreCandidateAPI = "http://ai:5000/api/v1/rank_candidates/ai"
+config_path = os.path.join(os.path.dirname(__file__), "../config/settings.json")
 
 class RESUME(BaseModel):
     resume: dict
