@@ -51,10 +51,28 @@ def describe_player(resume, mode):
         education = resume['education']
         experience = resume['experience']
         project = resume['project']
-    
-        highest_education = sorted(education, key=lambda x: x['degree'], reverse=True)[0]
-        latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
-        highest_degree = degree_names[highest_education['degree'] - education_bias]
+        
+        if education is not None and education != []:
+            highest_education = sorted(education, key=lambda x: x['degree'], reverse=True)[0]
+            highest_degree = degree_names[highest_education['degree'] - education_bias]
+        else:
+            highest_education = None
+            highest_degree = "Unknown"
+        
+        if experience is not None and experience != []:
+            latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
+        else:
+            latest_experience = {
+                'position': 'Unknown',
+                'company': 'Unknown',
+                'start_time': 'Unknown',
+                'end_time': 'Unknown'
+            }
+        
+        if project is not None and project != []:
+            pass
+        else:
+            project = []
         
         return f"""
         I am look into jobs. In the following is my resume.
@@ -84,9 +102,28 @@ def describe_player(resume, mode):
         experience = resume['experience']
         project = resume['project']
     
-        highest_education = sorted(education, key=lambda x: x['degree'], reverse=True)[0]
-        latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
-        highest_degree = degree_names[highest_education['degree'] - education_bias]
+        if education is not None and education != []:
+            highest_education = sorted(education, key=lambda x: x['degree'], reverse=True)[0]
+            highest_degree = degree_names[highest_education['degree'] - education_bias]
+        else:
+            highest_education = None
+            highest_degree = "Unknown"
+        
+        if experience is not None and experience != []:
+            latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
+        else:
+            latest_experience = {
+                'position': 'Unknown',
+                'company': 'Unknown',
+                'start_time': 'Unknown',
+                'end_time': 'Unknown'
+            }
+        
+        if project is not None and project != []:
+            pass
+        else:
+            project = []
+        
         heorshe = 'he' if gender == 'male' else 'she'
         himselfherself = 'himself' if gender == 'male' else 'herself'
         hisher = 'his' if gender == 'male' else 'her'
