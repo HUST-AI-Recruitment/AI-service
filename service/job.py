@@ -35,9 +35,6 @@ def describe_job(position, mode):
 def describe_player(resume, mode):
     assert mode in allowing_modes
     
-    # Get the resume content
-    
-    
     if mode == 'recommend-resume':
         id = resume['id']
         user_id = resume['user_id']
@@ -58,6 +55,7 @@ def describe_player(resume, mode):
         else:
             highest_education = None
             highest_degree = "Unknown"
+            education = []
         
         if experience is not None and experience != []:
             latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
@@ -68,6 +66,7 @@ def describe_player(resume, mode):
                 'start_time': 'Unknown',
                 'end_time': 'Unknown'
             }
+            experience = []
         
         if project is not None and project != []:
             pass
@@ -108,6 +107,7 @@ def describe_player(resume, mode):
         else:
             highest_education = None
             highest_degree = "Unknown"
+            education = []
         
         if experience is not None and experience != []:
             latest_experience = sorted(experience, key=lambda x: x['end_time'], reverse=True)[0]
@@ -118,6 +118,7 @@ def describe_player(resume, mode):
                 'start_time': 'Unknown',
                 'end_time': 'Unknown'
             }
+            experience = []
         
         if project is not None and project != []:
             pass
